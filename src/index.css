@@ -1,13 +1,264 @@
 body {
+  font-family: Arial, sans-serif;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  background-color: #f6f7f8;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  background-color: #ff4500;
+  /* background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/University_of_Illinois_at_Urbana-Champaign_Wordmark.svg/2880px-University_of_Illinois_at_Urbana-Champaign_Wordmark.svg.png"); */
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: contain;  
+  height: 100px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.content {
+  display: flex;
+  margin-top: 20px;
+}
+
+.feed {
+  flex: 3;
+  margin-right: 20px;
+}
+
+.sidebar {
+  flex: 1;
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.sidebar p {
+  font-size: 14px;
+  color: #555;
+}
+
+.rules {
+  margin-top: 20px;
+}
+
+.rule {
+  margin-bottom: 10px;
+}
+
+.rule-title {
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.rule-description {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #666;
+}
+
+.moderator-info {
+  margin-top: 20px;
+}
+
+.moderator-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.moderator-info li {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.post {
+  background: white;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar Policy Section */
+.policy-discussion {
+  margin-top: 20px;
+}
+
+.policy-item {
+  margin-bottom: 15px;
+}
+
+.policy-item h4 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.policy-item p {
+  font-size: 14px;
+  color: #666;
+}
+
+.policy-item button {
+  margin-top: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Policy Discussion Page */
+.policy-discussion-page {
+  max-width: 800px;
+  margin: 20px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.comments-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.comments-section li {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* User Component Layout */
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: #f8f8f8;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Logo Styles */
+.logo img {
+  width: 120px;
+  height: auto;
+}
+
+/* Right Side: User Actions */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.username {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.login-button,
+.logout-button {
+  background: #ff4500;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-button:hover,
+.logout-button:hover {
+  background: #d73800;
+}
+
+/* Login Dialog Styles */
+.login-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.dialog-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  width: 300px;
+  text-align: center;
+}
+
+.dialog-content h2 {
+  margin-bottom: 20px;
+}
+
+.dialog-content input {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.submit-button {
+  background: #ff4500;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-button {
+  background: #ddd;
+  color: black;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background: #d73800;
+}
+
+.cancel-button:hover {
+  background: #bbb;
 }
