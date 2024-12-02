@@ -1,7 +1,7 @@
 // components/Post.js
 import React, { useState } from "react";
 
-const Post = ({ post, onVote, discussionList, setDiscussionList }) => {
+const Post = ({ post, onVote }) => {
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState(["Nice post!", "React is great!"]);
 
@@ -10,12 +10,6 @@ const Post = ({ post, onVote, discussionList, setDiscussionList }) => {
     const newComment = event.target.comment.value;
     setComments([...comments, newComment]);
     event.target.reset();
-  };
-
-  const handleReportDiscussion = (event) => {
-    var discussionListUpdated = discussionList;
-    discussionListUpdated.push(post);
-    setDiscussionList(discussionListUpdated);
   };
 
   return (
@@ -28,10 +22,6 @@ const Post = ({ post, onVote, discussionList, setDiscussionList }) => {
         <button onClick={() => onVote(post.id, -1)}>⬇</button>
         <button onClick={() => setShowComments(!showComments)}>
           {showComments ? "Hide Comments" : "Show Comments"}
-        </button>
-        <button onClick={() => handleReportDiscussion()}>
-          {" "}
-          Report Discussion{" "}
         </button>
       </div>
       {showComments && (

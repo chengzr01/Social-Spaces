@@ -113,8 +113,11 @@ const Sidebar = () => {
       </div>
 
       <div className="policy-discussion">
-        <h3>Policy Discussion</h3>
-        <button onClick={openDialog}>Propose</button>
+        <div>
+          <h3>Policy Discussion</h3>
+          <button onClick={openDialog}>Propose</button>
+        </div>
+
         {policyProposals.map((policy) => (
           <div key={policy.id} className="policy-item">
             <h4>{policy.title}</h4>
@@ -124,24 +127,6 @@ const Sidebar = () => {
             </button>
           </div>
         ))}
-      </div>
-
-      <div className="policy-discussion">
-        <h3>Post Discussion</h3>
-        {discussionList.map((post) => (
-          <div key={post.id} className="policy-item">
-            <h4>{post.title}</h4>
-            <p>{post.description}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="moderator-info">
-        <h3>Moderators</h3>
-        <ul>
-          <li>Mod1</li>
-          <li>Mod2</li>
-        </ul>
       </div>
 
       {isDialogOpen && (
@@ -178,6 +163,24 @@ const Sidebar = () => {
           </div>
         </div>
       )}
+
+      <div className="policy-discussion">
+        <h3>Post Discussion</h3>
+        {discussionList.map((post) => (
+          <div key={post.id} className="policy-item">
+            <h4>{post.title}</h4>
+            <p>{post.description}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="moderator-info">
+        <h3>Moderators</h3>
+        <ul>
+          <li>Mod1</li>
+          <li>Mod2</li>
+        </ul>
+      </div>
     </div>
   );
 };
