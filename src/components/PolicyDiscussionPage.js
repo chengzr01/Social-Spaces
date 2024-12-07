@@ -24,7 +24,7 @@ const policies = {
 };
 
 const PolicyDiscussionPage = () => {
-  const { id } = useParams(); // Get the policy ID from the URL
+  const { id } = useParams();
   const navigate = useNavigate();
   const [comments, setComments] = useState(policies[id]?.comments || []);
   const [newComment, setNewComment] = useState("");
