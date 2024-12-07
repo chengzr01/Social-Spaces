@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-const PolicyCard = ({ policy }) => {
-  console.log(policy);
+const PolicyCard = ({
+  policy,
+  isFinal,
+  setDiscussionPolicy,
+  setDiscussionState,
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const navigate = useNavigate();
-
-  const goToPolicyDiscussion = (id) => {
-    navigate(`/policy/${id}`);
-  };
 
   const toggleExpand = () => {
     setIsExpanded((prev) => !prev);
@@ -37,9 +35,12 @@ const PolicyCard = ({ policy }) => {
           <p>{policy.policy_description}</p>
         </div>
       )}
-      {policy.is_final && (
+      {!isFinal && (
         <button
-          onClick={() => goToPolicyDiscussion(policy.policy_id)}
+          onClick={() => {
+            setDiscussionPolicy(policy);
+            setDiscussionState("discussion");
+          }}
           style={{ marginLeft: "10px" }}
         >
           Discuss

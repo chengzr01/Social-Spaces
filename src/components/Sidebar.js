@@ -3,16 +3,14 @@ import axios from "axios";
 
 import PolicyCard from "./Policy";
 
-const Sidebar = ({ discussionPost, setDiscussionPost }) => {
+const Sidebar = ({
+  discussionPost,
+  setDiscussionPost,
+  setDiscussionPolicy,
+  setDiscussionState,
+}) => {
   const [policies, setPolicies] = useState([]);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedPost, setSelectedPost] = useState("");
-  const [comment, setComment] = useState("");
-  function truncateText(text, maxLength) {
-    return text.length > maxLength
-      ? text.substring(0, maxLength) + "..."
-      : text;
-  }
+
   useEffect(() => {
     axios
       .get("/policy")
@@ -24,26 +22,6 @@ const Sidebar = ({ discussionPost, setDiscussionPost }) => {
         console.error("Failed to fetch policies:", error);
       });
   }, []);
-
-  const openDialog = () => setIsDialogOpen(true);
-  const closeDialog = () => {
-    setIsDialogOpen(false);
-    setSelectedPost("");
-    setComment("");
-  };
-
-  const handlePostSelection = (event) => setSelectedPost(event.target.value);
-  const handleCommentChange = (event) => setComment(event.target.value);
-
-  const submitProposal = () => {
-    console.log("Selected Post:", selectedPost);
-    console.log("Comment:", comment);
-
-    // Simulate getting policy suggestions from AI model
-    const aiSuggestions = ["Policy Suggestion 1", "Policy Suggestion 2"];
-    alert(`AI Policy Suggestions: ${aiSuggestions.join(", ")}`);
-    closeDialog();
-  };
 
   return (
     <div className="sidebar">
@@ -74,7 +52,13 @@ const Sidebar = ({ discussionPost, setDiscussionPost }) => {
       <div className="rules">
         <h3>Policies</h3>
         {policies.map((policy) => (
-          <PolicyCard key={policy.id} policy={policy} />
+          <PolicyCard
+            key={policy.id}
+            policy={policy}
+            isFinal={true}
+            setDiscussionPolicy={setDiscussionPolicy}
+            setDiscussionState={setDiscussionState}
+          />
         ))}
       </div>
 
@@ -88,7 +72,9 @@ const Sidebar = ({ discussionPost, setDiscussionPost }) => {
         >
           <h3>Policy Discussion</h3>
           <button
-            onClick={openDialog}
+            onClick={() => {
+              setDiscussionState("proposal");
+            }}
             style={{
               all: "unset", // Resets all default styles
               cursor: "pointer", // Ensures it still behaves like a button
@@ -101,45 +87,15 @@ const Sidebar = ({ discussionPost, setDiscussionPost }) => {
           </button>
         </div>
         {policies.map((policy) => (
-          <PolicyCard key={policy.id} policy={policy} />
+          <PolicyCard
+            key={policy.id}
+            policy={policy}
+            isFinal={false}
+            setDiscussionPolicy={setDiscussionPolicy}
+            setDiscussionState={setDiscussionState}
+          />
         ))}
       </div>
-
-      {isDialogOpen && (
-        <div className="dialog-overlay">
-          <div className="dialog-box">
-            <h3>Policy Proposal</h3>
-            <label>
-              Select a Post (Optional):
-              <select
-                value={selectedPost}
-                onChange={handlePostSelection}
-                style={{ display: "block", margin: "10px 0" }}
-              >
-                <option value="">None</option>
-                {discussionPost.map((post) => (
-                  <option key={post.id} value={post.title}>
-                    {truncateText(post.title, 50)}{" "}
-                    {/* Truncate titles to 50 characters */}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Comment:
-              <textarea
-                value={comment}
-                onChange={handleCommentChange}
-                style={{ display: "block", margin: "10px 0", width: "100%" }}
-              />
-            </label>
-            <div className="dialog-actions">
-              <button onClick={submitProposal}>Submit</button>
-              <button onClick={closeDialog}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <div className="policy-discussion">
         <h3>Post Discussion</h3>
