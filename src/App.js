@@ -7,13 +7,20 @@ import User from "./components/User";
 import "./index.css";
 
 const App = () => {
+  const [discussionPost, setDiscussionPost] = useState([]);
   return (
     <div className="app">
       <User />
       <Header />
       <div className="content">
-        <Feed />
-        <Sidebar />
+        <Feed
+          discussionPost={discussionPost}
+          setDiscussionPost={setDiscussionPost}
+        />
+        <Sidebar
+          discussionPost={discussionPost}
+          setDiscussionPost={setDiscussionPost}
+        />
       </div>
     </div>
   );

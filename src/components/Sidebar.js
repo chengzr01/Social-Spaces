@@ -1,52 +1,29 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const rules = [
-  {
-    id: 1,
-    title: "Sales, ads, voting, etc.",
-    description: "No promotional content or advertising.",
-  },
-  {
-    id: 2,
-    title: "Personal information",
-    description: "Do not share personal or sensitive information.",
-  },
-];
+import PolicyCard from "./Policy";
 
-const policyProposals = [
-  {
-    id: 1,
-    title: "Reduce spam filter aggressiveness",
-    description: "Adjust spam filters to allow legitimate posts.",
-  },
-  {
-    id: 2,
-    title: "Introduce weekly discussion threads",
-    description: "Encourage weekly discussions on campus topics.",
-  },
-];
-
-const discussionList = [
-  {
-    id: 1,
-    title: "Hello reddit!",
-    description: "This is my first post.",
-  },
-];
-
-const Sidebar = () => {
-  const [expandedRules, setExpandedRules] = useState([]);
+const Sidebar = ({ discussionPost, setDiscussionPost }) => {
+  const [policies, setPolicies] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState("");
   const [comment, setComment] = useState("");
-  const navigate = useNavigate();
-
-  const toggleRule = (id) => {
-    setExpandedRules((prev) =>
-      prev.includes(id) ? prev.filter((ruleId) => ruleId !== id) : [...prev, id]
-    );
-  };
+  function truncateText(text, maxLength) {
+    return text.length > maxLength
+      ? text.substring(0, maxLength) + "..."
+      : text;
+  }
+  useEffect(() => {
+    axios
+      .get("/policy")
+      .then((response) => {
+        const data = response.data;
+        setPolicies(data.map((policy) => ({ id: policy.id, ...policy })));
+      })
+      .catch((error) => {
+        console.error("Failed to fetch policies:", error);
+      });
+  }, []);
 
   const openDialog = () => setIsDialogOpen(true);
   const closeDialog = () => {
@@ -66,10 +43,6 @@ const Sidebar = () => {
     const aiSuggestions = ["Policy Suggestion 1", "Policy Suggestion 2"];
     alert(`AI Policy Suggestions: ${aiSuggestions.join(", ")}`);
     closeDialog();
-  };
-
-  const goToPolicyDiscussion = (id) => {
-    navigate(`/policy/${id}`); // Navigate to the discussion page
   };
 
   return (
@@ -99,40 +72,43 @@ const Sidebar = () => {
       </div>
 
       <div className="rules">
-        <h3>Rules</h3>
-        {rules.map((rule) => (
-          <div key={rule.id} className="rule">
-            <div className="rule-title" onClick={() => toggleRule(rule.id)}>
-              {rule.title} {expandedRules.includes(rule.id) ? "▲" : "▼"}
-            </div>
-            {expandedRules.includes(rule.id) && (
-              <p className="rule-description">{rule.description}</p>
-            )}
-          </div>
+        <h3>Policies</h3>
+        {policies.map((policy) => (
+          <PolicyCard key={policy.id} policy={policy} />
         ))}
       </div>
 
       <div className="policy-discussion">
-        <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center", // Ensures vertical alignment
+          }}
+        >
           <h3>Policy Discussion</h3>
-          <button onClick={openDialog}>Propose</button>
+          <button
+            onClick={openDialog}
+            style={{
+              all: "unset", // Resets all default styles
+              cursor: "pointer", // Ensures it still behaves like a button
+              fontSize: "inherit", // Matches the parent font size
+              fontFamily: "inherit", // Matches the parent font family
+              color: "inherit", // Matches the text color
+            }}
+          >
+            ➕
+          </button>
         </div>
-
-        {policyProposals.map((policy) => (
-          <div key={policy.id} className="policy-item">
-            <h4>{policy.title}</h4>
-            <p>{policy.description}</p>
-            <button onClick={() => goToPolicyDiscussion(policy.id)}>
-              Discuss
-            </button>
-          </div>
+        {policies.map((policy) => (
+          <PolicyCard key={policy.id} policy={policy} />
         ))}
       </div>
 
       {isDialogOpen && (
         <div className="dialog-overlay">
           <div className="dialog-box">
-            <h3>Propose a Policy</h3>
+            <h3>Policy Proposal</h3>
             <label>
               Select a Post (Optional):
               <select
@@ -141,9 +117,10 @@ const Sidebar = () => {
                 style={{ display: "block", margin: "10px 0" }}
               >
                 <option value="">None</option>
-                {discussionList.map((post) => (
+                {discussionPost.map((post) => (
                   <option key={post.id} value={post.title}>
-                    {post.title}
+                    {truncateText(post.title, 50)}{" "}
+                    {/* Truncate titles to 50 characters */}
                   </option>
                 ))}
               </select>
@@ -166,20 +143,12 @@ const Sidebar = () => {
 
       <div className="policy-discussion">
         <h3>Post Discussion</h3>
-        {discussionList.map((post) => (
-          <div key={post.id} className="policy-item">
+        {discussionPost.map((post) => (
+          <div key={post.post_id} className="policy-item">
             <h4>{post.title}</h4>
-            <p>{post.description}</p>
+            <p>{post.post_description}</p>
           </div>
         ))}
-      </div>
-
-      <div className="moderator-info">
-        <h3>Moderators</h3>
-        <ul>
-          <li>Mod1</li>
-          <li>Mod2</li>
-        </ul>
       </div>
     </div>
   );

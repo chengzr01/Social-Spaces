@@ -1,8 +1,26 @@
 // components/Post.js
 import React, { useState } from "react";
 
-const Post = ({ post, onVote }) => {
+const Post = ({ post, onVote, discussionPost, setDiscussionPost }) => {
   const [showComments, setShowComments] = useState(false);
+  const [inDiscussion, setInDiscussion] = useState(
+    discussionPost.includes(post)
+  );
+
+  const handleDiscussionUpdate = (event) => {
+    setInDiscussion(!inDiscussion);
+    if (discussionPost.includes(post)) {
+      // Exclude the post from the current discussionPost
+      const updatedDiscussionPost = discussionPost.filter(
+        (item) => item !== post
+      );
+      setDiscussionPost(updatedDiscussionPost); // Update the state
+    } else {
+      // Add the post to the discussionPost
+      const updatedDiscussionPost = [...discussionPost, post]; // Create a new array with the new post
+      setDiscussionPost(updatedDiscussionPost); // Update the state
+    }
+  };
 
   const handleCommentSubmit = (event) => {
     event.preventDefault();
@@ -54,7 +72,7 @@ const Post = ({ post, onVote }) => {
               fontSize: "16px",
             }}
           >
-            ⬆
+            ⬆️
           </button>
           <span style={{ margin: "0 5px" }}>{post.upvote}</span>
           <button
@@ -67,24 +85,44 @@ const Post = ({ post, onVote }) => {
               fontSize: "16px",
             }}
           >
-            ⬇
+            ⬇️
           </button>
         </div>
-        <button
-          onClick={() => setShowComments(!showComments)}
+        <div
           style={{
-            background: "#0079d3",
-            color: "#fff",
-            border: "none",
-            padding: "5px 10px",
-            borderRadius: "3px",
-            cursor: "pointer",
+            display: "flex",
+            gap: "10px", // Adds spacing between the buttons
           }}
         >
-          {showComments
-            ? "Hide Comments"
-            : `Show Comments (${post.comments.length})`}
-        </button>
+          <button
+            onClick={() => setShowComments(!showComments)}
+            style={{
+              background: "#ff4500",
+              color: "#fff",
+              border: "none",
+              padding: "5px 10px",
+              borderRadius: "3px",
+              cursor: "pointer",
+            }}
+          >
+            {showComments
+              ? "Hide Comments"
+              : `Show Comments (${post.comments.length})`}
+          </button>
+          <button
+            onClick={() => handleDiscussionUpdate()}
+            style={{
+              background: "#ff4500",
+              color: "#fff",
+              border: "none",
+              padding: "5px 10px",
+              borderRadius: "3px",
+              cursor: "pointer",
+            }}
+          >
+            {!inDiscussion ? "Add to Discussion" : "Remove from Discussion"}
+          </button>
+        </div>
       </div>
       {showComments && (
         <div className="comments" style={{ marginTop: "15px" }}>

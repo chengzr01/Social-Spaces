@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Post from "./Post";
 
-const Feed = ({ discussionList, setDiscussionList }) => {
+const Feed = ({ discussionPost, setDiscussionPost }) => {
   const [posts, setPosts] = useState([]);
   const [currentPosts, setCurrentPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -75,8 +75,8 @@ const Feed = ({ discussionList, setDiscussionList }) => {
           key={post.id}
           post={post}
           onVote={handleVote}
-          discussionList={discussionList}
-          setDiscussionList={setDiscussionList}
+          discussionPost={discussionPost}
+          setDiscussionPost={setDiscussionPost}
         />
       ))}
 
