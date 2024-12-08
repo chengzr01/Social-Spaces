@@ -1,46 +1,46 @@
-import axios from "axios";
-import Cookies from "js-cookie";
 import React, { useState, useEffect } from "react";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 const Discussion = ({ discussionPolicy, setDiscussionState }) => {
   const [userVote, setUserVote] = useState(null);
   const [userComment, setUserComment] = useState("");
-  // const [comments, setComments] = useState(discussionPolicy.comments);
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState(discussionPolicy.comments);
+
+  useEffect(() => {
+    if (discussionPolicy.comments) {
+      setComments(discussionPolicy.comments);
+    }
+  }, [discussionPolicy.comments]);
 
   const handleVote = (vote) => {
     setUserVote(vote);
   };
 
-  console.log(discussionPolicy);
-
   const handleSubmitComment = () => {
     const username = Cookies.get("username");
-    console.log(username);
     setUserComment("");
-    var newVote = 0;
-    if (userVote === "Agree") newVote = discussionPolicy.vote_count + 1;
-    else if (userVote === "Disagree") newVote = discussionPolicy.vote_count - 1;
-    else newVote = discussionPolicy.vote_count;
-    var newComments = comments;
-    newComments.push({
-      username: username,
-      vote: userVote || "No vote",
+
+    var vote_number = 0;
+    if (userVote === "Agree") {
+      vote_number = 1;
+    } else {
+      vote_number = -1;
+    }
+    const body = {
+      _id: discussionPolicy._id,
+      userID: username,
+      vote: vote_number,
       comment: userComment,
-    });
-    setComments([...comments]);
+    };
     axios
-      .post("/updatePolicy", {
-        _id: discussionPolicy._id,
-        userID: username,
-        vote: newVote,
-        comment: newComments,
-      })
+      .post("/updatePolicy", body)
       .then((response) => {
-        console.log(response);
+        console.log("Comment submitted successfully:", response);
+        setComments([...comments, { author: username, body: userComment }]);
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Error submitting comment:", error);
       });
   };
 
@@ -87,8 +87,7 @@ const Discussion = ({ discussionPolicy, setDiscussionState }) => {
           <ul>
             {comments.map((comment, index) => (
               <li key={index}>
-                <strong>{comment.username}</strong> ({comment.vote}):{" "}
-                {comment.comment}
+                <strong>{comment.author}</strong> : {comment.body}
               </li>
             ))}
           </ul>
