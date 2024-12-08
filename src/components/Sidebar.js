@@ -102,13 +102,13 @@ const Sidebar = ({
           >
             Propose
           </button>
-          <button
+          {/* <button
             onClick={() => {
               handleClearDiscussion();
             }}
           >
             Clear
-          </button>
+          </button> */}
         </div>
         {newPolicies.map((policy) => (
           <PolicyCard
