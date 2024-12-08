@@ -28,7 +28,7 @@ const PolicyCard = ({
           <b>{policy.policy_name}</b>
         </p>
 
-        <p style={{ marginLeft: "10px" }}>{isExpanded ? "⬆️" : "⬇️"}</p>
+        <p style={{ marginLeft: "10px" }}>{isExpanded ? "▲" : "▼"}</p>
       </div>
       {isExpanded && (
         <div className="policy-details">

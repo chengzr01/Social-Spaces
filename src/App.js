@@ -26,7 +26,12 @@ const App = () => {
           />
         );
       case "proposal":
-        return <Proposal setDiscussionState={setDiscussionState} />;
+        return (
+          <Proposal
+            discussionPost={discussionPost}
+            setDiscussionState={setDiscussionState}
+          />
+        );
       default:
         return (
           <Discussion

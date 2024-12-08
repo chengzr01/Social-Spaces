@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 
 const User = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -9,23 +10,43 @@ const User = () => {
     password: "",
   });
 
+  // Effect to check for username in cookies on component mount
+  useEffect(() => {
+    const cachedUsername = Cookies.get("username");
+    if (cachedUsername) {
+      setUserInfo({
+        username: cachedUsername,
+        avatar: "https://via.placeholder.com/40", // Placeholder avatar
+      });
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   const handleLoginClick = () => {
     setShowLoginDialog(true); // Show the login dialog
   };
 
   const handleLoginSubmit = () => {
     // Simulate login process
+    const username = credentials.username;
     setUserInfo({
-      username: credentials.username,
+      username,
       avatar: "https://via.placeholder.com/40", // Placeholder avatar
     });
     setIsLoggedIn(true);
+
+    // Save username to cookies
+    Cookies.set("username", username, { expires: 7 }); // Cookie expires in 7 days
+
     setShowLoginDialog(false); // Close the dialog
   };
 
   const handleLogout = () => {
     setUserInfo({ username: "", avatar: "" });
     setIsLoggedIn(false);
+
+    // Remove username from cookies
+    Cookies.remove("username");
   };
 
   const handleCancel = () => {
@@ -70,24 +91,24 @@ const User = () => {
           className="login-dialog"
           style={{
             display: "flex",
-            justifyContent: "center", // Horizontally centers the content
-            alignItems: "center", // Vertically centers the content
-            height: "100vh", // Takes full height of the viewport
-            backgroundColor: "rgba(0, 0, 0, 0.5)", // Optional: dim background for dialog
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
           }}
         >
           <div
             className="dialog-content"
             style={{
               display: "flex",
-              flexDirection: "column", // Stack child elements vertically
-              justifyContent: "center", // Center content vertically
-              alignItems: "center", // Center content horizontally
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
               padding: "20px",
               backgroundColor: "white",
-              borderRadius: "10px", // Optional: rounded corners
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Optional: shadow for the dialog
-              width: "300px", // Adjust the width as per your needs
+              borderRadius: "10px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              width: "300px",
             }}
           >
             <h2>Login</h2>
@@ -123,8 +144,8 @@ const User = () => {
               className="dialog-actions"
               style={{
                 display: "flex",
-                justifyContent: "space-between", // Space between the buttons
-                width: "80%", // Ensure buttons align with the inputs
+                justifyContent: "space-between",
+                width: "80%",
                 marginTop: "20px",
               }}
             >
@@ -136,7 +157,7 @@ const User = () => {
                   border: "none",
                   borderRadius: "5px",
                   cursor: "pointer",
-                  backgroundColor: "#4caf50", // Green for submit
+                  backgroundColor: "#4caf50",
                   color: "white",
                 }}
               >
@@ -150,7 +171,7 @@ const User = () => {
                   border: "none",
                   borderRadius: "5px",
                   cursor: "pointer",
-                  backgroundColor: "#f44336", // Red for cancel
+                  backgroundColor: "#f44336",
                   color: "white",
                 }}
               >

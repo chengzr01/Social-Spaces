@@ -10,6 +10,7 @@ const Sidebar = ({
   setDiscussionState,
 }) => {
   const [policies, setPolicies] = useState([]);
+  const [newPolicies, setNewPolicies] = useState([]);
 
   useEffect(() => {
     axios
@@ -22,6 +23,18 @@ const Sidebar = ({
         console.error("Failed to fetch policies:", error);
       });
   }, []);
+
+  useEffect(() => {
+    axios
+      .get("/newPolicy")
+      .then((response) => {
+        const data = response.data;
+        setNewPolicies(data.map((policy) => ({ id: policy.id, ...policy })));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
 
   return (
     <div className="sidebar">
@@ -75,18 +88,11 @@ const Sidebar = ({
             onClick={() => {
               setDiscussionState("proposal");
             }}
-            style={{
-              all: "unset", // Resets all default styles
-              cursor: "pointer", // Ensures it still behaves like a button
-              fontSize: "inherit", // Matches the parent font size
-              fontFamily: "inherit", // Matches the parent font family
-              color: "inherit", // Matches the text color
-            }}
           >
-            ➕
+            Propose
           </button>
         </div>
-        {policies.map((policy) => (
+        {newPolicies.map((policy) => (
           <PolicyCard
             key={policy.id}
             policy={policy}
