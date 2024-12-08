@@ -83,7 +83,7 @@ const Discussion = ({ discussionPolicy, setDiscussionState }) => {
 
       <div className="comments-section">
         <h3>Current Comments</h3>
-        {comments.length > 0 ? (
+        {comments ? (
           <ul>
             {comments.map((comment, index) => (
               <li key={index}>

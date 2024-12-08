@@ -36,6 +36,17 @@ const Sidebar = ({
       });
   });
 
+  const handleClearDiscussion = () => {
+    axios
+      .delete("/newPolicy")
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="sidebar">
       <div className="subreddit-info">
@@ -90,6 +101,13 @@ const Sidebar = ({
             }}
           >
             Propose
+          </button>
+          <button
+            onClick={() => {
+              handleClearDiscussion();
+            }}
+          >
+            Clear
           </button>
         </div>
         {newPolicies.map((policy) => (

@@ -11,6 +11,8 @@ const Proposal = ({ discussionPost, setDiscussionState }) => {
 
   const [selectedPost, setSelectedPost] = useState("");
   const [comment, setComment] = useState("");
+  const [result, setResult] = useState("");
+  const [preview, setPreview] = useState([]);
 
   const handlePostSelection = (event) => setSelectedPost(event.target.value);
   const handleCommentChange = (event) => setComment(event.target.value);
@@ -24,10 +26,11 @@ const Proposal = ({ discussionPost, setDiscussionState }) => {
         concern: comment,
       })
       .then((response) => {
-        console.log(response);
+        setResult("Succeed!");
+        setPreview(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        setResult("Fail!");
       });
   };
 
@@ -75,6 +78,9 @@ const Proposal = ({ discussionPost, setDiscussionState }) => {
           <button onClick={submitProposal}>Submit</button>
           <button onClick={clearProposal}>Cancel</button>
         </div>
+        <p>
+          <b>{result}</b>
+        </p>
       </div>
     </div>
   );
